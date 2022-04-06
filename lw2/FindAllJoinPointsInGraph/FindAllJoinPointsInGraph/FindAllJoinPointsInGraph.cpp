@@ -16,6 +16,12 @@ struct Node
 	bool visited = false;
 };
 
+struct Edge
+{
+	int v;
+	int to;
+};
+
 std::vector<std::vector<int>> FillAdjacencyMatrix(std::ifstream& inputFile);
 void printMatrix(std::vector<std::vector<int>> vec);
 
@@ -44,9 +50,10 @@ int main(int argc, char *argv[])
 	vector<int> timeIn(adjacencyMatrix[0].size(), 0);
 	vector<int> timeOut(adjacencyMatrix[0].size(), 0);
 	int timer = 0;
-
+	vector<Edge> backEdge;
 	int vertex;
 	int root = 1;
+	int parent = 1;
 	stack<int> stack;
 	stack.push(root);
 	visited[root] = true;
@@ -56,27 +63,53 @@ int main(int argc, char *argv[])
 	{
 		isHasEdge = false;
 		vertex = stack.top();
+		visited[vertex] = true;
 		cout << vertex << " ";
 		for (int i = 1; i < adjacencyMatrix[0].size(); ++i)
 		{
-			if (adjacencyMatrix[vertex][i] == 1 && !visited[i])
+			if (adjacencyMatrix[vertex][i] && !visited[i])
 			{
+				if(adjacencyMatrix[stack.top()][i])
+					parent = stack.top();
 				stack.push(i);
 				timeIn[i] = ++timer;
-				visited[i] = true;
 				isHasEdge = true;
+			}
+			else if (adjacencyMatrix[vertex][i] && visited[i] && i != parent && parent != vertex)
+			{
+				Edge edge;
+				edge.v = vertex;
+				edge.to = i;
+				backEdge.push_back(edge);
 			}
 		}
 		if (!isHasEdge)
 		{
+			/*for (int i = 1; i < adjacencyMatrix[0].size(); ++i)
+			{
+				if (adjacencyMatrix[vertex][i] == 1 && visited[i] && i != parent && vertex != parent)
+				{
+					Edge edge;
+					edge.v = vertex;
+					edge.to = i;
+					backEdge.push_back(edge);
+				}
+			}*/
 			stack.pop();
+			if(!stack.empty()) 
+				parent = stack.top();
 			timeOut[vertex] = ++timer;
 		}
 	}
 	cout << "\n";
 	copy(timeIn.begin(), timeIn.end(), ostream_iterator<int>(cout, " "));
-	cout << endl;
+	cout << "\n";
 	copy(timeOut.begin(), timeOut.end(), ostream_iterator<int>(cout, " "));
+	cout << "\n Print back edges\n";
+	for (auto& i : backEdge)
+	{
+		cout << i.v << ", " << i.to << "\n";
+	}
 }
 
 std::vector<std::vector<int>> FillAdjacencyMatrix(std::ifstream& inputFile)
