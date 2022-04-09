@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 	if (!inputFileName)
 	{
 		cout << "Invalid argument count\n";
-		cout << "Usage: ObsceneWordsFilter.exe <inputFileName>\n";
+		cout << "Usage: <Exe fileName> <inputFileName>\n";
 		return 1;
 	}
 	auto inputFile = OpenFile(*inputFileName);
@@ -50,11 +50,12 @@ int main(int argc, char *argv[])
 	vector<bool> visited(adjacencyMatrix[0].size(), 0);
 	vector<int> timeIn(adjacencyMatrix[0].size(), 0);
 	vector<int> timeOut(adjacencyMatrix[0].size(), 0);
+	//vector<int> parent(adjacencyMatrix[0].size(), 0);
 	int timer = 0;
 	vector<Edge> backEdge;
 	int vertex;
 	int root = 1;
-	int parent = 1;
+	int parent = 0;
 	stack<int> stack;
 	stack.push(root);
 	visited[root] = true;
@@ -67,20 +68,32 @@ int main(int argc, char *argv[])
 		{
 			timeIn[vertex] = ++timer;
 		}
-		cout << vertex << " ";
+		cout << parent << ", " << vertex << "; ";
 
 		for (int i = 1; i < adjacencyMatrix[0].size(); ++i)
 		{
-			if (adjacencyMatrix[vertex][i] && !visited[i])
+			if (adjacencyMatrix[vertex][i])
 			{
-				stack.push(i);
-				isVertexHasEdge = true;
-				break;
+				if (!visited[i])
+				{
+					parent = stack.top();
+					stack.push(i);
+					isVertexHasEdge = true;
+					break;
+				}
+				if (visited[i] && timeIn[vertex] - timeIn[i] > 1 && i != parent && !timeOut[parent])
+				{
+					Edge edge;
+					edge.v = vertex;
+					edge.to = i;
+					backEdge.push_back(edge);
+				}
 			}
 			isVertexHasEdge = false;
 		}
 		if (!isVertexHasEdge)
 		{
+			parent = stack.top();
 			timeOut[vertex] = ++timer;
 			stack.pop();
 		}
