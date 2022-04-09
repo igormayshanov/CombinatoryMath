@@ -10,6 +10,7 @@
 
 using namespace std;
 
+
 struct Node
 {
 	int value; 
@@ -57,48 +58,31 @@ int main(int argc, char *argv[])
 	stack<int> stack;
 	stack.push(root);
 	visited[root] = true;
-	timeIn[root] = ++timer;
-	bool isHasEdge;
+	bool isVertexHasEdge = true;
 	while (!stack.empty())
 	{
-		isHasEdge = false;
 		vertex = stack.top();
 		visited[vertex] = true;
+		if (isVertexHasEdge)
+		{
+			timeIn[vertex] = ++timer;
+		}
 		cout << vertex << " ";
+
 		for (int i = 1; i < adjacencyMatrix[0].size(); ++i)
 		{
 			if (adjacencyMatrix[vertex][i] && !visited[i])
 			{
-				if(adjacencyMatrix[stack.top()][i])
-					parent = stack.top();
 				stack.push(i);
-				timeIn[i] = ++timer;
-				isHasEdge = true;
+				isVertexHasEdge = true;
+				break;
 			}
-			else if (adjacencyMatrix[vertex][i] && visited[i] && i != parent && parent != vertex)
-			{
-				Edge edge;
-				edge.v = vertex;
-				edge.to = i;
-				backEdge.push_back(edge);
-			}
+			isVertexHasEdge = false;
 		}
-		if (!isHasEdge)
+		if (!isVertexHasEdge)
 		{
-			/*for (int i = 1; i < adjacencyMatrix[0].size(); ++i)
-			{
-				if (adjacencyMatrix[vertex][i] == 1 && visited[i] && i != parent && vertex != parent)
-				{
-					Edge edge;
-					edge.v = vertex;
-					edge.to = i;
-					backEdge.push_back(edge);
-				}
-			}*/
-			stack.pop();
-			if(!stack.empty()) 
-				parent = stack.top();
 			timeOut[vertex] = ++timer;
+			stack.pop();
 		}
 	}
 	cout << "\n";
