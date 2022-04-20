@@ -46,5 +46,8 @@
     <Text Include="input4.txt" />
     <Text Include="input5.txt" />
     <Text Include="input6.txt" />
+    <Text Include="input1vertex.txt" />
+    <Text Include="input2vertex.txt" />
+    <Text Include="input8.txt" />
   </ItemGroup>
 </Project>
