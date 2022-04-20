@@ -35,10 +35,5 @@ int main(int argc, char *argv[])
 	int root = 1;
 	DFS(root, adjacencyMatrix, timeIn, timeOut, backEdge, children);
 	FindJoinPointsInGraph(adjacencyMatrix, timeIn, timeOut, backEdge, children, root, joinPoints);
-	
-	for (auto& i : joinPoints)
-	{
-		cout << i << " ";
-	}
-	cout << "\n";
+	PrintSet(joinPoints);
 }

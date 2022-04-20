@@ -21,11 +21,11 @@ std::vector<std::vector<int>> FillAdjacencyMatrix(std::ifstream& inputFile)
 }
 
 void DFS(int root,
-		std::vector<std::vector<int>> const& adjacencyMatrix,
-		std::vector<int>& timeIn,
-		std::vector<int>& timeOut,
-		std::vector<Edge>& backEdge,
-		std::vector<int>& children)
+	std::vector<std::vector<int>> const& adjacencyMatrix,
+	std::vector<int>& timeIn,
+	std::vector<int>& timeOut,
+	std::vector<Edge>& backEdge,
+	std::vector<int>& children)
 {
 	vector<bool> visited(adjacencyMatrix[0].size(), 0);
 	int timer = 0;
@@ -75,12 +75,12 @@ void DFS(int root,
 }
 
 void FindJoinPointsInGraph(std::vector<std::vector<int>> const& adjacencyMatrix,
-							std::vector<int> const& timeIn,
-							std::vector<int> const& timeOut,
-							std::vector<Edge> const& backEdge,
-							std::vector<int> const& children,
-							int root,
-							std::set<int>& joinPoints)
+	std::vector<int> const& timeIn,
+	std::vector<int> const& timeOut,
+	std::vector<Edge> const& backEdge,
+	std::vector<int> const& children,
+	int root,
+	std::set<int>& joinPoints)
 {
 	for (int vertex = 1; vertex < adjacencyMatrix[0].size(); ++vertex)
 	{
@@ -126,7 +126,7 @@ void FindJoinPointsInGraph(std::vector<std::vector<int>> const& adjacencyMatrix,
 	}
 }
 
-void printMatrix(std::vector<std::vector<int>> vec)
+void printMatrix(std::vector<std::vector<int>> const& vec)
 {
 	for (auto& i : vec)
 	{
@@ -136,4 +136,13 @@ void printMatrix(std::vector<std::vector<int>> vec)
 		}
 		std::cout << "\n";
 	}
+}
+
+void PrintSet(std::set<int> const& inputSet)
+{
+	for (auto& i : inputSet)
+	{
+		cout << i << " ";
+	}
+	cout << "\n";
 }

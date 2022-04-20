@@ -31,4 +31,6 @@ void FindJoinPointsInGraph(std::vector<std::vector<int>> const& adjacencyMatrix,
 	int root, 
 	std::set<int>& joinPoints);
 
-void printMatrix(std::vector<std::vector<int>> vec);
+void printMatrix(std::vector<std::vector<int>> const& vec);
+void PrintSet(std::set<int> const& inputSet);
+
