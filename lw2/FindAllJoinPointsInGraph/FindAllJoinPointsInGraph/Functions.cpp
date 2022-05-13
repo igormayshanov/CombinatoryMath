@@ -10,7 +10,6 @@ std::vector<std::vector<int>> FillAdjacencyMatrix(std::ifstream& inputFile)
 	int numOfEdges;
 	inputFile >> numOfVertices >> numOfEdges;
 	std::vector<std::vector<int>> adjacencyMatrix(numOfVertices + 1, vector<int>(numOfVertices + 1, 0));
-	std::string stringFromFile;
 	int vertex1, vertex2;
 	while (inputFile >> vertex1 >> vertex2)
 	{
