@@ -20,7 +20,10 @@ std::optional<Args> ParseArgs(int argc, char* argv[]);
 std::optional<std::ifstream> OpenFile(std::string fileName);
 std::vector<std::vector<int>> GetAdjacencyMatrix(std::ifstream& inputFile);
 std::vector<std::vector<int>> TransformMatrix(std::vector<std::vector<int>>& inputMatrix);
-std::vector<int> CheckPair(const std::vector<std::vector<int>>& matrix);
+std::vector<int> CheckPair(const std::vector<std::vector<int>>& matrix, std::vector<int>& pair,
+	int& existJobPosX, int& existJobPosXcurr, int& existJobPosY);
+int GetMinElemAboveZeroInVector(const std::vector<int>& vector);
+void SubtractionMinElem(std::vector<int>& vector, int min);
 void PrintMatrix(const vector<vector<int>>& matrix);
 void PrintMatrix(const vector<vector<float>>& matrix);
 
@@ -47,8 +50,27 @@ int main(int argc, char* argv[])
 	auto matrix = TransformMatrix(inputMatrix);
 	cout << "Print output matrix\n";
 	PrintMatrix(matrix);
+	int existJobPosX = 0;
+	int existJobPosXcurr = 0;
+	int existJobPosY = 0;
 
-	auto pair = CheckPair(matrix);
+	std::vector<int> pair(matrix.size(), -1);
+	while (std::find(pair.begin(), pair.end(), -1) != pair.end())
+	{
+		pair = CheckPair(matrix, pair, existJobPosX, existJobPosXcurr, existJobPosY);
+		int min1 = GetMinElemAboveZeroInVector(matrix[existJobPosX]);
+		int min2 = GetMinElemAboveZeroInVector(matrix[existJobPosXcurr]);
+		int min = min1 < min2 ? min1 : min2;
+		SubtractionMinElem(matrix[existJobPosX], min);
+		SubtractionMinElem(matrix[existJobPosXcurr], min);
+
+		cout << "min = " << min << "\n";
+
+		cout << existJobPosX << ", " << existJobPosXcurr << ", " << existJobPosY << "\n";
+
+	}
+	
+	PrintMatrix(matrix);
 
 	copy(pair.begin(), pair.end(), ostream_iterator<int>(cout, " "));
 
@@ -127,39 +149,37 @@ std::vector<std::vector<int>> TransformMatrix(std::vector<std::vector<int>>& inp
 	return matrix;
 }
 
-std::vector<int> CheckPair(const std::vector<std::vector<int>>& matrix)
+std::vector<int> CheckPair(const std::vector<std::vector<int>>& matrix, std::vector<int>& pair,
+	int& existJobPosX, int& existJobPosXcurr, int& existJobPosY)
 {
-	int existRowPos = 0;
-	int existColumnPos = 0;
 	bool exist = false;
-	std::vector<int> work(matrix.size(), -1);
 	for (int i = 0; i < matrix.size(); i++)
 	{
 		for (int j = 0; j < matrix.size(); j++)
 		{
 			if (matrix[i][j] == 0)
 			{
-				for (int k = 0; k < work.size(); k++)
+				for (int k = 0; k < pair.size(); k++)
 				{
-					if (work[k] == j)
+					if (pair[k] == j)
 					{
-						existRowPos = k;
-						existColumnPos = j;
+						existJobPosX = k;
+						existJobPosY = j;
+						existJobPosXcurr = i;
 						exist = true;
 						break;
 					}
 				}
 				if (!exist)
 				{
-					work[i] = j;
+					pair[i] = j;
 				}
 				exist = false;
 			}
 			continue;
 		}
 	}
-	cout << "conflict pos = " << existRowPos << ", " << existColumnPos << "\n";
-	return work;
+	return pair;
 }
 
 
@@ -185,5 +205,27 @@ void PrintMatrix(const vector<vector<float>>& matrix)
 			std::cout << matrix[i][j] << " ";
 		}
 		std::cout << "\n";
+	}
+}
+
+int GetMinElemAboveZeroInVector(const std::vector<int>& vector)
+{
+	int min = INT_MAX;
+	for (auto& i : vector)
+	{
+		if (i != 0)
+			min = min < i ? min : i;
+	}
+	return min;
+}
+
+void SubtractionMinElem(std::vector<int>& vector, int min)
+{
+	for (auto& i : vector)
+	{
+		if (i != 0)
+		{
+			i == INT_MAX ? i = INT_MAX : i -= min;
+		}
 	}
 }
