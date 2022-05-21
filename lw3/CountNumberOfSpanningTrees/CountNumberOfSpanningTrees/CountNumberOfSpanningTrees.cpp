@@ -9,13 +9,6 @@
 using namespace std;
 
 const int MAX_MATRIX_SIZE = 100;
-//
-//typedef float Matrix3x3[MATRIX_SIZE][MATRIX_SIZE];
-//
-//struct WrappedMatrix3x3
-//{
-//	Matrix3x3 items;
-//};
 
 struct Args
 {
@@ -26,7 +19,9 @@ std::optional<Args> ParseArgs(int argc, char* argv[]);
 std::optional<std::ifstream> OpenFile(std::string fileName);
 std::vector<std::vector<int>> GetAdjacencyMatrix(std::ifstream& inputFile);
 vector<vector <float>> GetKirchhoffMatrix(vector<vector <int>> adjacencyMatrix);
-int GetNumberOfSpanningTrees(vector<vector <float>>& matrix);
+vector<vector <float>> GetMatrixForAlgebraicAddition(const vector<vector <float>>& matrix);
+void BringingMatrixToTriangularForm(vector<vector <float>>& matrix);
+int GetDeterminant(const vector<vector <float>>& matrix);
 void PrintMatrix(const vector<vector<int>>& matrix);
 void PrintMatrix(const vector<vector<float>>& matrix);
 
@@ -48,17 +43,17 @@ int main(int argc, char* argv[])
 
 	auto inputMatrix = GetAdjacencyMatrix(*inputFile1);
 	auto kirchhoffMatrix = GetKirchhoffMatrix(inputMatrix);
-
+	
+	cout << "Print input matrix\n";
 	PrintMatrix(inputMatrix);
-	PrintMatrix(kirchhoffMatrix);
-	vector<vector<float>> test = {
-		{1, 2, 3, 4},
-		{2, 3, 2, 3},
-		{1, 4, 1, 2},
-		{4, 5, 0, 1},
-	};
 
-	int numOfSpanningTrees = GetNumberOfSpanningTrees(kirchhoffMatrix);
+	cout << "Print Kirchhoff matrix\n";
+	PrintMatrix(kirchhoffMatrix);
+
+	auto algebraicAdditionalMatrix = GetMatrixForAlgebraicAddition(kirchhoffMatrix);
+	BringingMatrixToTriangularForm(algebraicAdditionalMatrix);
+	int numOfSpanningTrees = GetDeterminant(algebraicAdditionalMatrix);
+	cout << "Number of spanning trees = " << numOfSpanningTrees << "\n";
 
 	return 0;
 }
@@ -92,7 +87,6 @@ std::vector<std::vector<int>> GetAdjacencyMatrix(std::ifstream& inputFile)
 {
 	int numOfVertices;
 	inputFile >> numOfVertices;
-	cout << numOfVertices << "\n";
 	std::vector<std::vector<int>> adjacencyMatrix(numOfVertices, vector<int>(numOfVertices, 0));
 	for (int i = 0; i < numOfVertices; i++)
 	{
@@ -121,28 +115,45 @@ vector<vector <float>> GetKirchhoffMatrix(vector<vector <int>> adjacencyMatrix)
 	return kirchhoffMatrix;
 }
 
-int GetNumberOfSpanningTrees(vector<vector <float>>& matrix)
+vector<vector <float>> GetMatrixForAlgebraicAddition(const vector<vector <float>>& matrix)
 {
-	for (int col = 0; col < matrix.size()-1; col++)
+	vector<vector <float>> resultMatrix(matrix.size() - 1, vector<float>(matrix.size() -1, 0));
+	for (int i = 0; i < matrix.size() - 1; i++)
 	{
-		for (int row = col+1; row < matrix.size(); row++)
+		for (int j = 0; j < matrix.size() - 1; j++)
+			resultMatrix[i][j] = matrix[i][j];
+	}
+	return resultMatrix;
+}
+
+void BringingMatrixToTriangularForm(vector<vector <float>>& matrix)
+{
+	for (int col = 0; col < matrix.size() - 1; col++)
+	{
+		for (int row = col + 1; row < matrix.size(); row++)
 		{
 			if (matrix[col][col] != 0)
 			{
 				float k = matrix[row][col] / matrix[col][col];
-				cout << "column = " << col << ", row = " << row << ", koef = " << k << "\n";
 				for (int i = 0; i < matrix.size(); i++)
 				{
-					matrix[row][i] = floor((matrix[row][i] - k * matrix[col][i])*100)/100;
-					cout << row << ", " << i << ", " << matrix[row][i] 
-						<< ", " << k * matrix[col][i] << "\n";
+					matrix[row][i] = round((matrix[row][i] - k * matrix[col][i]) * 100) / 100;
 				}
 			}
 		}
 	}
-	PrintMatrix(matrix);
-	return 0;
 }
+
+int GetDeterminant(const vector<vector <float>>& matrix)
+{
+	float determinant = 1;
+	for (int i = 0; i < matrix.size(); i++)
+	{
+		determinant *= matrix[i][i];
+	}
+	return determinant;
+}
+
 
 void PrintMatrix(const vector<vector<int>>& matrix)
 {
