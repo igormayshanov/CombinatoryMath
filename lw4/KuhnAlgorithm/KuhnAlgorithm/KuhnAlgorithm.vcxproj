@@ -21,10 +21,9 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{e0d83708-8ad1-4d1f-808d-265a76cc1c96}</ProjectGuid>
-    <RootNamespace>HungarianAlgorithm</RootNamespace>
+    <ProjectGuid>{926bdd44-5c80-494c-837f-0fca4549b603}</ProjectGuid>
+    <RootNamespace>KuhnAlgorithm</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>KuhnAlgorithm</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -144,14 +143,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="KuhnAlgorithm.cpp" />
     <ClCompile Include="functions.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="input1.txt" />
+    <ClCompile Include="KuhnAlgorithm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="functions.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="input.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
