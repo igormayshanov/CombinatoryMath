@@ -36,8 +36,8 @@ int main()
 
 	while (border != 1)
 	{
-		copy(currPermutation.begin(), currPermutation.end(), std::ostream_iterator<size_t>(std::cout, " "));
-		cout << "\n";
+		//copy(currPermutation.begin(), currPermutation.end(), std::ostream_iterator<size_t>(std::cout, " "));
+		//cout << "\n";
 		border = size;
 		while (currPermutation[reversePermutation[border] + direction[border]] > border && border > 1)
 		{

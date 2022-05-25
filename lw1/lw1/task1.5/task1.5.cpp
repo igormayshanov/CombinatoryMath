@@ -23,8 +23,8 @@ int main()
 
     while (v[k] != 1)
     {
-        copy(v.begin(), v.end() - 1, std::ostream_iterator<size_t>(std::cout, " "));
-        cout << "\n";
+        //copy(v.begin(), v.end() - 1, std::ostream_iterator<size_t>(std::cout, " "));
+        //cout << "\n";
         int i = 0;
         while (v[i] == N - 1)
         {
