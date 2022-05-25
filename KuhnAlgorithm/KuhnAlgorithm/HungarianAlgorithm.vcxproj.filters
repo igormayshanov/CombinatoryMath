@@ -23,12 +23,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <Text Include="input1.txt" />
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="functions.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="input.txt" />
-    <Text Include="input1.txt" />
   </ItemGroup>
 </Project>
